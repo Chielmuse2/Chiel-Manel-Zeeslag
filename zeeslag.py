@@ -51,3 +51,5 @@ vakje = bord[2][1]
 printbord()
 boten()
 printbord()
+
+#thats crazy dawg
