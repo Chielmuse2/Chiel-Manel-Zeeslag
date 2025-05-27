@@ -1,8 +1,8 @@
 import tkinter as tk
 
 # Parameters
-ROWS = 10
-COLS = 10
+ROWS = 117
+COLS = 16
 CELL_SIZE = 40  # grootte van elke cel (in pixels)
 
 def create_board(root):

@@ -1,4 +1,4 @@
-import tkinter as tk
+from tkinter import *
 
 # Kleuren
 fillColor = "lightgray"
@@ -7,20 +7,20 @@ hoverColor = "blue"
 hoverTextColor = "white"
 
 # Hover-functies
-def on_enter(e):
-    e.widget.config(bg=hoverColor, fg=hoverTextColor)
+def on_enter(e): #e betekend in deze context any
+    e.widget.config(bg=hoverColor, fg=hoverTextColor) #kleur veranderen wanneer je boven de knop hangt
 
 def on_leave(e):
-    e.widget.config(bg=fillColor, fg=textColor)
+    e.widget.config(bg=fillColor, fg=textColor) #kleur terugveranderen als je weer van de knop af gaat
 
 # Hoofdvenster
-root = tk.Tk()
+root = Tk()
 root.title("Hover Button Demo")
 root.geometry("300x150")
 
 # Knoppen aanmaken
-openMultiplayer = tk.Button(root, text="Multiplayer", bg=fillColor, fg=textColor)
-openSingleplayer = tk.Button(root, text="Singleplayer", bg=fillColor, fg=textColor)
+openMultiplayer = Button(root, text="Multiplayer", bg=fillColor, fg=textColor)
+openSingleplayer = Button(root, text="Singleplayer", bg=fillColor, fg=textColor)
 
 # Buttons in lijst
 buttons = [openMultiplayer, openSingleplayer]
