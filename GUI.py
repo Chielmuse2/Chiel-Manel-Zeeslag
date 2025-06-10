@@ -8,8 +8,8 @@ fillColor             = "#81d4fa"
 hoverColor            = "#ffd54f"   
 hoverTextColor        = "black"     
 textColor             = "black"
-
-selection_color = "#4dd0e1"
+hoverColorFire = "#ff9a00"
+selection_color = "#FFFFFF"
 mis_color = "#b3e5fc"
 hit_color = "#e53935"
 
@@ -22,16 +22,15 @@ def open_game_window():
     game_window.deiconify()
 
 def open_game_window_multiplayer():
-    game_window_multiplayer.deiconify()
+    game_window_multiplayer_p1.deiconify()
 
 def open_home_window_from_singleplayer():
-    home_window.deiconify()
     game_window.withdraw()
+    home_window.deiconify()
 
 def open_home_window_from_multiplayer():
+    game_window_multiplayer_p1.withdraw()
     home_window.deiconify()
-    game_window_multiplayer.withdraw()
-
 def close_all():
     home_window.destroy()
 
@@ -41,15 +40,33 @@ def on_enter(e):
 def on_leave(e):
     e.widget.config(bg=fillColor, fg=textColor)
 
+def on_enter_fire(e):
+    e.widget.config(bg=hoverColorFire, fg=hoverTextColor)
+
+def on_leave_fire(e):
+    e.widget.config(bg=hit_color, fg=textColor)
+
+
 def create_grid(parent_window):
     grid_frame = Frame(parent_window, bg=backgroundColor)
-    grid_frame.place(relx=0.5, rely=0.5, anchor='center')
+    grid_frame.place(relx=0.5, rely=0.5, anchor='center') #zorgen dat het hele grid in het midden zit
 
+    #nummers 1 - 10 aan de bovenkant
+    for col in range(10):
+        label = Label(grid_frame, text=str(col+1), width=6, height= 3, bg=titleBackgroundColor, bd=3, relief="solid")
+        label.grid(row=0, column=col+1)
+
+    #letters A - J aan de linkerkant
+    for row in range(10):
+        label = Label(grid_frame, text=chr(65+row), width=6, height= 3, bg=titleBackgroundColor, bd=3, relief="solid")  #gebruik van ASCII tabel
+        label.grid(row=row+1, column=0) 
+
+    #Bord met knoppen maken
     for row in range(10):
         for col in range(10):
-            btn = Button(grid_frame, width=6, height=3, bg="lightgray")
+            btn = Button(grid_frame, width=6, height=3, bg=fillColor, bd=3, relief="solid")
             btn.config(command=lambda r=row, c=col, b=btn: on_button_select(r, c, b))
-            btn.grid(row=row, column=col, padx=2, pady=2)
+            btn.grid(row=row+1, column=col+1, padx=0.25, pady=0.25)
 
 def on_button_select(row, col, button):
     global aangeklikt_vakje
@@ -59,10 +76,18 @@ def on_button_select(row, col, button):
         oud_aangeklikt_vakje = button
         aangeklikt_vakje = (row, col)
     if aangeklikt_vakje is not (row, col):
-        oud_aangeklikt_vakje.config(bg="lightgrey")
+        oud_aangeklikt_vakje.config(bg=fillColor)
         oud_aangeklikt_vakje = button
         button.config(bg=selection_color)
         aangeklikt_vakje = (row, col)
+
+def to_player_two():
+    game_window_multiplayer_p1.withdraw()
+    game_window_multiplayer_p2.deiconify()
+
+def to_player_one():
+    game_window_multiplayer_p1.deiconify()
+    game_window_multiplayer_p2.withdraw()
 
 ########## Home window ##########
 home_window = Tk()
@@ -77,8 +102,8 @@ home_window.wm_title("Welkom bij zeeslag!")
 
 naastTitel = Label(home_window, bg=titleBackgroundColor, bd=6, relief="solid", font=titelFont)
 naastTitel.place(relwidth=1)
-titel = Label(home_window, width=20, bg=titleBackgroundColor, text="Z e e s l a g", bd=6, relief="solid", font=titelFont)
-titel.place(x=156, y=0)
+titel = Label(home_window, width=22, bg=titleBackgroundColor, text="Z e e s l a g", bd=6, relief="solid", font=titelFont)
+titel.place(x=75, y=0)
 
 openSingleplayer = Button(home_window, text="Singleplayer", font=kopjesFont, bd=6, relief="solid", bg=fillColor, command=open_game_window, width=15, height=5)
 openSingleplayer.place(x=1467, y=800)
@@ -121,33 +146,66 @@ closeSingleplayer.place(x=1467, y=800)
 
 naastTitel = Label(game_window, bg=titleBackgroundColor, bd=6, relief="solid", font=titelFont)
 naastTitel.place(relwidth=1)
-titel = Label(game_window, width=20, bg=titleBackgroundColor, text="S I N G L E P L A Y E R", bd=6, relief="solid", font=titelFont)
-titel.place(x=156, y=0)
+titel = Label(game_window, width=22, bg=titleBackgroundColor, text="S I N G L E P L A Y E R", bd=6, relief="solid", font=titelFont)
+titel.place(x=75, y=0)
 
 create_grid(game_window)
 
-########## Game window multiplayer ##########
-game_window_multiplayer = Toplevel()
-game_window_multiplayer.attributes("-fullscreen", True)
-game_window_multiplayer.configure(bg=backgroundColor)
-game_window_multiplayer.wm_title("Multiplayer")
-game_window_multiplayer.withdraw()
+########## Game window multiplayer player 1##########
+game_window_multiplayer_p1 = Toplevel()
+game_window_multiplayer_p1.attributes("-fullscreen", True)
+game_window_multiplayer_p1.configure(bg=backgroundColor)
+game_window_multiplayer_p1.wm_title("Multiplayer - Player 1")
+game_window_multiplayer_p1.withdraw()
 
-closeMultiplayer = Button(game_window_multiplayer, text="Home", font=kopjesFont, bd=6, relief="solid", bg=fillColor, command=open_home_window_from_multiplayer, width=15, height=5)
-closeMultiplayer.place(x=1467, y=800)
+homeButton = Button(game_window_multiplayer_p1, text="Home", font=kopjesFont, bd=6, relief="solid", bg=fillColor, command=open_home_window_from_multiplayer, width=15, height=5)
+homeButton.place(x=100, y=800)
 
-naastTitel = Label(game_window_multiplayer, bg=titleBackgroundColor, bd=6, relief="solid", font=titelFont)
+toPlayer2Button = Button(game_window_multiplayer_p1, text="Player 2", font=kopjesFont, bd=6, relief="solid", bg=fillColor, command=to_player_two, width=15, height=5)
+toPlayer2Button.place(x=1467, y=800)
+
+naastTitel = Label(game_window_multiplayer_p1, bg=titleBackgroundColor, bd=6, relief="solid", font=titelFont)
 naastTitel.place(relwidth=1)
-titel = Label(game_window_multiplayer, width=20, bg=titleBackgroundColor, text="M U L T I P L A Y E R", bd=6, relief="solid", font=titelFont)
-titel.place(x=156, y=0)
+titel = Label(game_window_multiplayer_p1, width=22, bg=titleBackgroundColor, text="MULTIPLAYER-PLAYER 1", bd=6, relief="solid", font=titelFont)
+titel.place(x=75, y=0)
 
-create_grid(game_window_multiplayer)
+fireButtonP1 = Button(game_window_multiplayer_p1, text="FIRE", font=kopjesFont, bd=6, relief="solid", bg=hit_color, width=25, height=2)
+fireButtonP1.place(relx=0.5, y=966, anchor='center')
+
+create_grid(game_window_multiplayer_p1)
+
+
+########## Game window multiplayer player 2##########
+game_window_multiplayer_p2 = Toplevel()
+game_window_multiplayer_p2.attributes("-fullscreen", True)
+game_window_multiplayer_p2.configure(bg=backgroundColor)
+game_window_multiplayer_p2.wm_title("Multiplayer - Player 2")
+game_window_multiplayer_p2.withdraw()
+
+
+naastTitel = Label(game_window_multiplayer_p2, bg=titleBackgroundColor, bd=6, relief="solid", font=titelFont)
+naastTitel.place(relwidth=1)
+titel = Label(game_window_multiplayer_p2, width=22, bg=titleBackgroundColor, text="MULTIPLAYER-PLAYER 2", bd=6, relief="solid", font=titelFont)
+titel.place(x=75, y=0)
+
+toPlayer1Button = Button(game_window_multiplayer_p2, text="Player 1", font=kopjesFont, bd=6, relief="solid", bg=fillColor, command=to_player_one, width=15, height=5)
+toPlayer1Button.place(x=1467, y=800)
+
+fireButtonP2 = Button(game_window_multiplayer_p2, text="FIRE", font=kopjesFont, bd=6, relief="solid", bg=hit_color, width=25, height=2)
+fireButtonP2.place(relx=0.5, y=966, anchor='center')
+
+create_grid(game_window_multiplayer_p2)
 
 ########## Hover effecten ##########
-buttons = [openMultiplayer, openSingleplayer, closeMultiplayer, closeSingleplayer, closeGame]
+buttons = [openMultiplayer, openSingleplayer, homeButton, closeSingleplayer, closeGame, toPlayer1Button, toPlayer2Button]
 
 for btn in buttons:
     btn.bind("<Enter>", on_enter)
     btn.bind("<Leave>", on_leave)
 
+fireButtons =[fireButtonP1, fireButtonP2]
+
+for frbtn in fireButtons:
+    frbtn.bind("<Enter>", on_enter_fire)
+    frbtn.bind("<Leave>", on_leave_fire)
 home_window.mainloop()
