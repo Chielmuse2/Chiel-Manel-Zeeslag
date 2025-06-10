@@ -28,18 +28,25 @@ def printbord(a):
 
 def kiesVakje():
     loop1 = True
+    fout = 0 
     while loop1 == True:
-                    Y = random.randint(0,(GROOTE_BORD-1))
-                    X = random.randint(0,(GROOTE_BORD-1))
-                    vak = bord[Y][X]
-                    print(vak)
-                    if vak == "~":
-                        loop1 = False
-                        print("yes3")
-                    else:
-                        loop1 = True
-                        print("no")
+        Y = random.randint(0,(GROOTE_BORD-1))
+        X = random.randint(0,(GROOTE_BORD-1))
+        vak = bord[Y][X]
+        print(vak)
+        if vak == '~':
+            loop1 = False
+            print("yes3")
+        else:
+            loop1 = True
+            print("no")
+            fout += 1
+        if fout == 100:
+            print("fout is hier man")
+            quit
+            break
     return Y,X
+
 def boten():
     i = 0
     print("yes")
@@ -72,18 +79,20 @@ def TweeLangBoten():
                     if bord[Y][X+1] == '~':
                         bord[Y][X+1] = "b"
                         loop2 = False 
-                    elif bord[Y][X-1] == '~'and bord[Y][X] != 0:
-                        bord[Y][X-1] = "b"
-                        loop2 = False
+                    elif X != 0:
+                        if bord[Y][X-1] == '~':
+                            bord[Y][X-1] = "b"
+                            loop2 = False
                     else:
                         loop2 = True
                 else:
                     if bord[Y][X-1] == '~':
                         bord[Y][X-1] = "b"
                         loop2 = False 
-                    elif bord[Y][X+1] == '~'and bord[Y][X] != (GROOTE_BORD-1):
-                        bord[Y][X+1] = "b"
-                        loop2 = False
+                    elif X != (GROOTE_BORD-1):
+                        if bord[Y][X+1] == '~':
+                            bord[Y][X+1] = "b"
+                            loop2 = False
                     else:
                         loop2 = True
             if orientatie == 0:
@@ -95,18 +104,20 @@ def TweeLangBoten():
                     if bord[Y+1][X] == '~':
                         bord[Y+1][X] = "b"
                         loop2 = False
-                    elif bord[Y-1][X] == '~'and bord[Y][X-1] != 0:
-                        bord[Y-1][X] = "b"
-                        loop2 = False
+                    elif X-1 != 0:
+                        if bord[Y-1][X] == '~':
+                            bord[Y-1][X] = "b"
+                            loop2 = False
                     else:
                         loop2 = True
                 else:
                     if bord[Y-1][X] == '~':
                         bord[Y-1][X] = "b"
                         loop2 = False 
-                    elif bord[Y+1][X] == '~'and bord[Y][X] != 0:
-                        bord[Y+1][X] = "b"
-                        loop2 = False
+                    elif Y != (GROOTE_BORD-1):
+                        if  bord[Y+1][X] == '~':
+                            bord[Y+1][X] = "b"
+                            loop2 = False
                     else:
                         loop2 = True 
             omringing_boten()
@@ -136,7 +147,7 @@ def DrieLangBoten():
                         else:   
                             break
                     for x in x3:
-                        if X+x != 0:
+                        if X+x >= 0:
                             if bord[Y][X+x] == '~' and lengte < 3:
                                 bord[Y][X+x] = "b"
                                 lengte += 1
@@ -146,28 +157,28 @@ def DrieLangBoten():
                                 loop2 = True
                         else:
                             loop2 = True
-            else:
-                lengte = 1
-                x2 = [1,2]
-                x3 = [-1,-2]
-                for x in x3:
-                    if bord[Y][X+x] == '~' and lengte < 3:
-                       bord[Y][X+x] = "b"
-                       lengte += 1
-                    else:   
-                        break
-                for x in x2:
-                    if X+x != GROOTE_BORD:
+                else:
+                    lengte = 1
+                    x2 = [1,2]
+                    x3 = [-1,-2]
+                    for x in x3:
                         if bord[Y][X+x] == '~' and lengte < 3:
                             bord[Y][X+x] = "b"
                             lengte += 1
-                        elif lengte == 3:
+                        else:   
                             break
+                    for x in x2:
+                        if X+x < GROOTE_BORD:
+                            if bord[Y][X+x] == '~' and lengte < 3:
+                                bord[Y][X+x] = "b"
+                                lengte += 1
+                            elif lengte == 3:
+                                break
+                            else:
+                                loop2 = True
                         else:
                             loop2 = True
-                    else:
-                        loop2 = True
-                loop2 = False
+                    loop2 = False
             if orientatie == 0:
                 bord[Y][X] = "b"
                 print(bord[Y][X])
@@ -184,7 +195,7 @@ def DrieLangBoten():
                         else:   
                             break
                     for y in y3:
-                        if Y+y != 0:
+                        if Y+y >= 0:
                             if bord[Y+y][X] == '~' and lengte < 3:
                                 bord[Y+y][X] = "b"
                                 lengte += 1
@@ -205,7 +216,7 @@ def DrieLangBoten():
                         else:   
                             break
                     for y in y2:
-                        if Y+y != GROOTE_BORD:
+                        if Y+y < GROOTE_BORD:
                             if bord[Y+y][X] == '~' and lengte < 3:
                                 bord[Y+y][X] = "b"
                                 lengte += 1
@@ -243,7 +254,7 @@ def VierLangBoten():
                         else:   
                             break
                     for x in x3:
-                        if X+x <= 0:
+                        if X+x >= 0:
                             if bord[Y][X+x] == '~' and lengte < 4:
                                 bord[Y][X+x] = "b"
                                 lengte += 1
@@ -257,13 +268,13 @@ def VierLangBoten():
                     x2 = [1,2,3]
                     x3 = [-1,-2,-3]
                     for x in x3:
-                        if bord[Y][X+x] == '~' and lengte < 4 :
+                        if bord[Y][X+x] == '~' and lengte < 4:
                            bord[Y][X+x] = "b"
                            lengte += 1
                         else:   
                             break
                     for x in x2:
-                        if X+x >= GROOTE_BORD-1:
+                        if X+x < GROOTE_BORD:
                             if bord[Y][X+x] == '~' and lengte < 4:
                                 bord[Y][X+x] = "b"
                                 lengte += 1
@@ -290,7 +301,7 @@ def VierLangBoten():
                         else:   
                             break
                     for y in y3:
-                        if Y+y <= 0:
+                        if Y+y >= 0:
                             if bord[Y+y][X] == '~' and lengte < 4:
                                 bord[Y+y][X] = "b"
                                 lengte += 1
@@ -310,7 +321,7 @@ def VierLangBoten():
                         else:   
                             break
                     for y in y2:
-                        if Y+y >= GROOTE_BORD:
+                        if Y+y < GROOTE_BORD:
                             if bord[Y+y][X] == '~' and lengte < 4:
                                 bord[Y+y][X] = "b"
                                 lengte += 1
@@ -328,20 +339,9 @@ def VierLangBoten():
 def VijfLangBoten():
     i = 0
     while i < 1: 
-        loop1 = True
         loop2 = True
         while loop2 == True:
-            while loop1 == True:
-                Y = random.randint(0,(GROOTE_BORD-1))
-                X = random.randint(0,(GROOTE_BORD-1))
-                vak = bord[Y][X]
-                print(vak)
-                if vak == "~":
-                    loop1 = False
-                    print("yes3")
-                else:
-                    loop1 = True
-                    print("no")
+            Y,X = kiesVakje()
             orientatie = random.randint(0,1)
             if orientatie == 1:
                 bord[Y][X] = "b"
@@ -359,7 +359,7 @@ def VijfLangBoten():
                         else:   
                             break
                     for x in x3:
-                        if X+x != 0:
+                        if X+x >= 0:
                             if bord[Y][X+x] == '~' and lengte < 5:
                                 bord[Y][X+x] = "b"
                                 lengte += 1
@@ -379,7 +379,7 @@ def VijfLangBoten():
                         else:   
                             break
                     for x in x2:
-                        if X+x != GROOTE_BORD:
+                        if X+x < GROOTE_BORD:
                             if bord[Y][X+x] == '~' and lengte < 5:
                                 bord[Y][X+x] = "b"
                                 lengte += 1
@@ -406,7 +406,7 @@ def VijfLangBoten():
                         else:   
                             break
                     for y in y3:
-                        if Y+y != 0:
+                        if Y+y >= 0:
                             if bord[Y+y][X] == '~' and lengte < 5:
                                 bord[Y+y][X] = "b"
                                 lengte += 1
@@ -426,7 +426,7 @@ def VijfLangBoten():
                         else:   
                             break
                     for y in y2:
-                        if Y+y != GROOTE_BORD:
+                        if Y+y < GROOTE_BORD:
                             if bord[Y+y][X] == '~' and lengte < 5:
                                 bord[Y+y][X] = "b"
                                 lengte += 1
@@ -498,7 +498,7 @@ def schieten(xcoord, ycoord):
         if boten_over < 1:
             won = True
         else:
-            print("goed gedaan je hebt een boot geraakt, er zijn nu nog",boten_over, "boten over!")
+            print("goed gedaan je hebt een boot geraakt, er zijn nu nog",boten_over, "boten stukjes over!")
     return won
 
 
@@ -509,10 +509,31 @@ bord = maakbord()
 miss = al_geschoten()
 print(bord)
 printbord(bord)
-VijfLangBoten()
-VierLangBoten()
-# TweeLangBoten()
-# DrieLangBoten()
+loop3 = True
+while loop3 == True:
+    botencounter = 0
+    VijfLangBoten()
+    VierLangBoten()
+    TweeLangBoten()
+    DrieLangBoten()
+    for rij in range(GROOTE_BORD):
+        for column in range(GROOTE_BORD):
+            if bord[rij][column] == "b":
+                botencounter+=1
+    if botencounter == 17:
+        print("botenplaatsen succesvol")
+        loop3 = False
+        break
+    else:
+        print("fout")
+        for rij in range(GROOTE_BORD):
+            for column in range(GROOTE_BORD):
+                bord[rij][column] = "~"
+        loop3 = True
+
+
+
+
 Verwijder_omringing()
 while won == False:
     printbord(miss)
