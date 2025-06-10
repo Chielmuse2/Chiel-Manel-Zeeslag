@@ -1,35 +1,45 @@
-from tkinter import *
+import tkinter as tk
 
-# Kleuren
-fillColor = "lightgray"
-textColor = "black"
-hoverColor = "blue"
-hoverTextColor = "white"
+selection_color = "#4dd0e1"
+default_color = "lightgray"
 
-# Hover-functies
-def on_enter(e): #e betekend in deze context any
-    e.widget.config(bg=hoverColor, fg=hoverTextColor) #kleur veranderen wanneer je boven de knop hangt
+def create_grid(parent_window):
+    selected_button = [None]      # currently selected button widget
+    selected_position = [None]    # (row, col) of selected button
 
-def on_leave(e):
-    e.widget.config(bg=fillColor, fg=textColor) #kleur terugveranderen als je weer van de knop af gaat
+    def on_button_click(row, col, button):
+        # Reset previous selection
+        if selected_button[0] is not None:
+            selected_button[0].config(bg=default_color)
 
-# Hoofdvenster
-root = Tk()
-root.title("Hover Button Demo")
-root.geometry("300x150")
+        # Update current selection
+        button.config(bg=selection_color)
+        selected_button[0] = button
+        selected_position[0] = (row, col)
 
-# Knoppen aanmaken
-openMultiplayer = Button(root, text="Multiplayer", bg=fillColor, fg=textColor)
-openSingleplayer = Button(root, text="Singleplayer", bg=fillColor, fg=textColor)
+    def fire():
+        if selected_position[0] is not None:
+            row, col = selected_position[0]
+            print(f"Fired at position: row={row}, col={col}")
+        else:
+            print("No position selected to fire at.")
 
-# Buttons in lijst
-buttons = [openMultiplayer, openSingleplayer]
+    grid_frame = tk.Frame(parent_window, bg="white")
+    grid_frame.place(relx=0.5, rely=0.5, anchor='center')
 
-# Event-binding voor hover
-for btn in buttons:
-    btn.bind("<Enter>", on_enter)
-    btn.bind("<Leave>", on_leave)
-    btn.pack(pady=10)
+    for row in range(10):
+        for col in range(10):
+            btn = tk.Button(grid_frame, width=6, height=3, bg=default_color)
+            btn.config(command=lambda r=row, c=col, b=btn: on_button_click(r, c, b))
+            btn.grid(row=row, column=col, padx=2, pady=2)
 
-# Start de GUI
+    # Fire button below the grid
+    fire_btn = tk.Button(parent_window, text="Fire", command=fire, bg="#f44336", fg="white")
+    fire_btn.place(relx=0.5, rely=0.9, anchor='center', width=100, height=40)
+
+root = tk.Tk()
+root.title("10x10 Grid with Fire Button")
+root.geometry("700x700")
+
+create_grid(root)
 root.mainloop()
