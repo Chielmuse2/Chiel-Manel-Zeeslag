@@ -7,10 +7,15 @@ titleBackgroundColor  = "#00bcd4"
 fillColor             = "#81d4fa"   
 hoverColor            = "#ffd54f"   
 hoverTextColor        = "black"     
-textColor             = "#004d40"
+textColor             = "black"
+
+selection_color = "#4dd0e1"
+mis_color = "#b3e5fc"
+hit_color = "#e53935"
 
 ########## Globale variabelen ##########
-aangeklikt_vakje = ""
+aangeklikt_vakje = None
+oud_aangeklikt_vakje = None
 
 ########## Defs ##########
 def open_game_window():
@@ -42,9 +47,22 @@ def create_grid(parent_window):
 
     for row in range(10):
         for col in range(10):
-            # Gebruik lambda om row en col op te slaan voor de command
-            btn = Button(grid_frame, width=6, height=3, bg="lightgray") #,command=lambda r=row, c=col: print(f"{r}, {c}"))
+            btn = Button(grid_frame, width=6, height=3, bg="lightgray")
+            btn.config(command=lambda r=row, c=col, b=btn: on_button_select(r, c, b))
             btn.grid(row=row, column=col, padx=2, pady=2)
+
+def on_button_select(row, col, button):
+    global aangeklikt_vakje
+    global oud_aangeklikt_vakje
+    if aangeklikt_vakje is None:
+        button.config(bg=selection_color)
+        oud_aangeklikt_vakje = button
+        aangeklikt_vakje = (row, col)
+    if aangeklikt_vakje is not (row, col):
+        oud_aangeklikt_vakje.config(bg="lightgrey")
+        oud_aangeklikt_vakje = button
+        button.config(bg=selection_color)
+        aangeklikt_vakje = (row, col)
 
 ########## Home window ##########
 home_window = Tk()

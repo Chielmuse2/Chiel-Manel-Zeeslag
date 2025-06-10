@@ -1,15 +1,17 @@
 import tkinter as tk
 
 selection_color = "#4dd0e1"
+mis_color = "#b3e5fc"
+hit_color = "#e53935"
 default_color = "lightgray"
 
 def create_grid(parent_window):
-    selected_button = [None]      # currently selected button widget
-    selected_position = [None]    # (row, col) of selected button
+    selected_button = []      # currently selected button widget
+    selected_position = []    # (row, col) of selected button
 
     def on_button_click(row, col, button):
         # Reset previous selection
-        if selected_button[0] is not None:
+        if selected_button[0] is not "":
             selected_button[0].config(bg=default_color)
 
         # Update current selection

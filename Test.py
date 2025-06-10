@@ -3,17 +3,31 @@ selection_color = "#4dd0e1"
 mis_color = "#b3e5fc"
 hit_color = "#e53935"
 
-geklikt_vakje = []
+geklikt_vakje = ""
+oud_geklikt = ""
 
 # Functie die wordt aangeroepen wanneer een knop wordt geklikt
-
+def fire():
+    global oud_geklikt
+    global geklikt_vakje
+    oud_geklikt.config(bg=hit_color)
+    oud_geklikt = ""
+    geklikt_vakje = ""
 
 def on_button_click(row, col, button):
-    button.config(bg=selection_color)
-    selected_row = row
-    selected_col = col
-    return selected_row, selected_col
-
+    global geklikt_vakje
+    global oud_geklikt
+    if geklikt_vakje is "":
+        button.config(bg=selection_color)
+        oud_geklikt = button
+        geklikt_vakje = (row, col)
+    if geklikt_vakje is not (row, col):
+        oud_geklikt.config(bg="lightgrey")
+        oud_geklikt = button
+        button.config(bg=selection_color)
+        geklikt_vakje = (row, col)
+    print(geklikt_vakje)
+    print(oud_geklikt)
 
 # Functie die het raster maakt
 def create_grid(parent_window):
@@ -31,6 +45,9 @@ def create_grid(parent_window):
 root = tk.Tk()
 root.title("10x10 Grid")
 root.geometry("700x700")  # Pas de grootte aan indien nodig
+
+fire_btn = tk.Button(root, text="Fire", command=fire, bg="#f44336", fg="white")
+fire_btn.grid(row =0, column= 0)
 
 # Raster aanmaken in het venster
 create_grid(root)
