@@ -368,7 +368,7 @@ borderVert1.place(x=772, y=205)
 image_path = r"images/boot enzo.jpg"
 image = Image.open(image_path)
 image = image.resize((935, 455))  
-photo = ImageTk.PhotoImage(image)
+#photo = ImageTk.PhotoImage(image)
 
 photoLabel = Label(home_window, image=photo, bd=6, relief="solid")
 photoLabel.place(x=820, y=198)
